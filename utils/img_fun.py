@@ -7,6 +7,21 @@ from typing import Tuple
 from rasterio.windows import Window
 import numpy as np
 
+
+def ensure_rgb_channels(array: np.ndarray, profile: dict) -> Tuple[np.ndarray, dict]:
+    """
+    YOLO (y pretrain en ImageNet) espera 3 canales RGB. Los GeoTIFF del ortomosaico
+    suelen tener 4 bandas (p. ej. RGBA); convierte a las 3 primeras bandas.
+    """
+    if array.ndim != 3:
+        return array, profile
+    out_profile = profile.copy()
+    if array.shape[0] > 3:
+        array = array[:3, :, :].copy()
+        out_profile["count"] = 3
+    return array, out_profile
+
+
 # Funciones para el procesamiento de imágenes
 def hello():
     print("Hello, world!")
@@ -138,6 +153,7 @@ def crop_tile_into_subrecortes(
                     txt_output_dir = os.path.join("coords", "negatives")
                     os.makedirs(txt_output_dir, exist_ok=True)
                     if filtered_coords.empty:
+                        cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                         with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                             dst.write(cropped_image)
                         # Crear un txt vacío para cada imagen que cumpla esta condición
@@ -149,7 +165,7 @@ def crop_tile_into_subrecortes(
                     if filtered_coords.empty or cropped_image.shape[1] != 640 or cropped_image.shape[2] != 640:
                         continue  
 
-                        
+                    cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                     with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                         dst.write(cropped_image)
 
@@ -207,10 +223,12 @@ def crop_tile_horizontal_flip(
 
                 if is_negative:
                     if filtered_coords.empty:
+                        cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                         with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                             dst.write(cropped_image)
                 else:
                     if not filtered_coords.empty:
+                        cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                         with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                             dst.write(cropped_image)
                     else:

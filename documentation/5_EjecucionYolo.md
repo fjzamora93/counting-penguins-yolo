@@ -1,3 +1,51 @@
+## NOTAS DE 2026
+
+
+Sustituye tu sección de "Yolov8 nano, M, L" por las versiones de 2026. La nomenclatura se mantiene, pero el rendimiento en objetos pequeños (tus pingüinos) es superior:
+
+    YOLO26 Nano (yolo26n.pt): Sustituye al v8n. Es mucho más inteligente detectando formas pequeñas.
+
+    YOLO26 Medium (yolo26m.pt): El equilibrio ideal para drones.
+
+    YOLO26 Large (yolo26l.pt): Máxima precisión para conteos científicos finales.
+
+
+
+Si el entrenamiento falla con **«expected input to have 3 channels, but got 4»**, los TIFF del dataset tienen 4 bandas (p. ej. RGBA) y YOLO espera RGB (3). Convierte el dataset ya generado y borra cachés de etiquetas:
+
+```bash
+python scripts/convert_dataset_tiff_to_rgb.py
+```
+
+Los recortes nuevos que guardes con `utils/img_fun.py` ya se exportan en RGB (3 bandas).
+
+Comando adaptado par ael MODELO MEDIO:
+
+```bash
+
+# EL que se ha usado mar 29 a las 13:33 NANO
+yolo train model=yolo26n.pt data=datasets/penguin_dataset.yaml epochs=100 imgsz=640 batch=4 device=cpu
+
+
+# Modelo medio, prosimo a utilizar: no afina demasiado parobar aumentar el tamaño
+yolo train model=yolo26s.pt data=datasets/penguin_dataset.yaml epochs=30 imgsz=512 batch=16 device=cpu
+
+
+
+
+
+yolo train model=yolo26n.pt data=datasets/penguin_dataset.yaml epochs=100 imgsz=640 batch=4 device=cpu
+
+
+yolo train model=yolo26m.pt data=./datasets/penguin_dataset.yaml epochs=100 imgsz=1024 batch=-1 device=cpu
+```
+
+
+
+
+
+## DOCUMENTACIÓN 2024
+
 Una vez están clasificados los conjunto de entrenamiento y test, se procede a la ejecución de YOLO. Para ello, se debe seguir los siguientes pasos:
 
 1. Creamos el archivo penguin_dataset.yaml, que tiene la configuración básica.

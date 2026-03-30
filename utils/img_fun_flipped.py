@@ -7,6 +7,8 @@ from typing import Tuple
 from rasterio.windows import Window
 import numpy as np
 
+from utils.img_fun import ensure_rgb_channels
+
 # Funciones para el procesamiento de imágenes
 def hello():
     print("Hello, world!")
@@ -142,6 +144,7 @@ def crop_tile_into_subrecortes_flipped(
                         print("Coordenadas vacías... guardando")
                         filename = f"negative_{i * cols + j + 1}.tiff"
                         output_path = f"{output_dir}/{filename}"
+                        cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                         with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                             dst.write(cropped_image)
                 else:
@@ -150,6 +153,7 @@ def crop_tile_into_subrecortes_flipped(
                         continue  # No guardar imágenes sin coordenadas si no queremos negativos
                     filename = f"{num_tile}_{i * cols + j + 1}.tiff"
                     output_path = f"{output_dir}/{filename}"
+                    cropped_image, cropped_meta = ensure_rgb_channels(cropped_image, cropped_meta)
                     with rasterio.open(output_path, 'w', **cropped_meta) as dst:
                         dst.write(cropped_image)
                 
