@@ -28,7 +28,7 @@ yolo train model=yolo26n.pt data=datasets/penguin_dataset.yaml epochs=100 imgsz=
 
 
 # Modelo medio, prosimo a utilizar: no afina demasiado parobar aumentar el tamaño
-yolo train model=yolo26s.pt data=datasets/penguin_dataset.yaml epochs=30 imgsz=512 batch=16 device=cpu
+yolo train model=yolo26s.pt data=datasets/penguin_dataset.yaml epochs=30 imgsz=512 batch=32 device=cpu
 
 
 
