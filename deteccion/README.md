@@ -1,10 +1,13 @@
-# README
+# Instrucciones para hacer detecciones
 
-En este directorio están el modelo best.pt y un conjunto de imágenes para poder hacer predicciones.
+En este directorio están el modelo best.pt y un conjunto de imágenes para poder hacer detecciones en base a nuevas imágenes.
 
-COmando a ejecutar para hacer las predcciones
 
-Ejecutar este comando desde el directorio de 'deteccion'
+## Pasos a seguir:
+1. Meter en la carpeta de 'imgs' las imágenes sobre las que quieras hacer predicciones -preferiblemente recortadas en 500-600px. En esta carpeta las imágenes estarán en 4 canales. Si ya están en 3 canales por la razón que sea, las puedes pasar a imgs_rgb.
+2. Ejecutar el script de convert_to_rgb.py. Esto va a convertir las imágenes de imgs > imgs_rgb (las pasa a 3 canales)
+3. Ejectar el script en la terminal de aquí abajo para hacer las predicciones:
+
 
 ```bash
 yolo detect predict \
@@ -21,6 +24,10 @@ yolo detect predict \
   show_labels=False \
   show_conf=False
 ```
+
+4. Finalmente, puedes ir la carpeta de runs para ver la salida y los resultados de la predicción
+
+
 
 ### Parámetros del comando de predicción
 
